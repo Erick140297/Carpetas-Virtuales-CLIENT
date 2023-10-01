@@ -156,7 +156,7 @@ const FormularioStation = () => {
             name="name"
             className="outline-none border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
             type="text"
-            placeholder="Nombre(s)"
+            placeholder="Nombre"
             value={formData.name}
             onChange={handleChange}
           />
