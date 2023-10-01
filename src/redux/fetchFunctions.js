@@ -1,4 +1,5 @@
-const URL = `http://localhost:3001`;
+// const URL = `http://localhost:3001`;
+const URL = `https://carpetas-virtuales.onrender.com`
 
 export const login = async (data) => {
   const response = await fetch(`${URL}/user/auth`, {
