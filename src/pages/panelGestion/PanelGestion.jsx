@@ -5,7 +5,9 @@ import { getStationsByZone } from "../../redux/fetchFunctions";
 import { setStationsByZone } from "../../redux/slices/stationSlice";
 
 function PanelGestion() {
-  const zones = ["Chimalhuacan-Neza", "Neza-CDMX", "Cuernavaca"];
+  // const zones = ["Chimalhuacan-Neza", "Neza-CDMX", "Cuernavaca"];
+  const zones = ["Neza-CDMX"];
+
   const [buttonStates, setButtonStates] = useState(
     Array(zones.length).fill(false)
   );
