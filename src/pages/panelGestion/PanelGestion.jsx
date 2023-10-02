@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+// import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import StationsByZone from "../../components/StationsByZone";
 import { getStationsByZone } from "../../redux/fetchFunctions";
@@ -8,34 +9,43 @@ function PanelGestion() {
   // const zones = ["Chimalhuacan-Neza", "Neza-CDMX", "Cuernavaca"];
   const zones = ["Neza-CDMX"];
 
-  const [buttonStates, setButtonStates] = useState(
-    Array(zones.length).fill(false)
-  );
+  // const [buttonStates, setButtonStates] = useState(
+  //   Array(zones.length).fill(false)
+  // );
 
-  useEffect(() => {
-    const newButtonStates = [];
-    newButtonStates[0] = true;
-    setButtonStates(newButtonStates);
-  }, []);
+  // useEffect(() => {
+  //   const newButtonStates = [];
+  //   newButtonStates[0] = true;
+  //   setButtonStates(newButtonStates);
+  // }, []);
 
-  const zoneOneOpen = (index) => {
-    const newButtonStates = [];
-    newButtonStates[index] = !newButtonStates[index];
-    setButtonStates(newButtonStates);
-  };
+  // const zoneOneOpen = (index) => {
+  //   const newButtonStates = [];
+  //   newButtonStates[index] = !newButtonStates[index];
+  //   setButtonStates(newButtonStates);
+  // };
 
   const dispatch = useDispatch();
 
+  // const stations = async () => {
+  //   const response = await getStationsByZone(
+  //     zones.find((_, index) => buttonStates[index])
+  //   );
+  //   dispatch(setStationsByZone(response));
+  // };
+
   const stations = async () => {
-    const response = await getStationsByZone(
-      zones.find((_, index) => buttonStates[index])
-    );
+    const response = await getStationsByZone(zones[0]);
     dispatch(setStationsByZone(response));
   };
 
+  // useEffect(() => {
+  //   stations();
+  // }, [buttonStates]);
+
   useEffect(() => {
     stations();
-  }, [buttonStates]);
+  }, []);
 
   return (
     <div className="flex flex-row mt-10 overscroll-none">
@@ -50,12 +60,13 @@ function PanelGestion() {
               return (
                 <li key={index}>
                   <button
-                    onClick={() => zoneOneOpen(index)}
+                    // onClick={() => zoneOneOpen(index)}
                     type="button"
                     className={`${
-                      buttonStates[index]
-                        ? "flex items-center p-2 w-full bg-gray-700 text-gray-900 rounded-lg dark:text-white +group shadow-lg"
-                        : "flex items-center p-2 w-full text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-400 ease-in-out group shadow-lg"
+                      // buttonStates[index]
+                        // ? "flex items-center p-2 w-full bg-gray-700 text-gray-900 rounded-lg dark:text-white +group shadow-lg"
+                        // : 
+                        "flex items-center p-2 w-full text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-400 ease-in-out group shadow-lg"
                     }`}
                   >
                     <svg
