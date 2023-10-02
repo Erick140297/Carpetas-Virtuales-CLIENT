@@ -49,6 +49,9 @@ const Login = () => {
       if (user.post == "Equipo de apoyo") {
         navigate("/panel-gestion");
       }
+      if (user.post == "Supervisor") {
+        navigate("/panel-gestion");
+      }
       if (user.post == "Gerente") {
         await station(user);
         navigate(`/panel-gerente`);
