@@ -256,7 +256,7 @@ const FormularioUsers = () => {
           >
             <option value=""></option>
             <option value="Administrador">Administrador</option>
-            <option value="Gestor legal">Gestor legal</option>
+            <option value="Equipo de apoyo">Equipo de apoyo</option>
             <option value="Gerente">Gerente</option>
             <option value="Supervisor">Supervisor</option>
           </select>

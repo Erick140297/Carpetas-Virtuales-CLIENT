@@ -46,7 +46,7 @@ const Login = () => {
       if (user.post == "Administrador") {
         navigate("/panel-admin");
       }
-      if (user.post == "Gestor legal") {
+      if (user.post == "Equipo de apoyo") {
         navigate("/panel-gestion");
       }
       if (user.post == "Gerente") {
