@@ -119,7 +119,7 @@ const Archivo = ({ file }) => {
               </div>
             </div>
             <div className="flex justify-center space-x-2 mr-1 mb-3">
-              {gerente && file.status === "En revisión..." && (
+              {file.status === "En revisión..." && (
                 <button
                   onClick={() => handleDelete(file._id)}
                   className="inline-flex items-center pl-1 pr-1 py-1 text-sm font-medium text-center text-white bg-red-700 rounded-full hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-700 dark:hover:bg-red-800 dark:focus:ring-red-800"

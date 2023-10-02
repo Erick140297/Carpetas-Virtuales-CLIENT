@@ -48,10 +48,10 @@ function PanelGestion() {
   }, []);
 
   return (
-    <div className="flex flex-row mt-10 overscroll-none">
+    <div className="flex flex-row mt-10 overscroll-none flex-1 h-full">
       <aside
         id="logo-sidebar"
-        className="top-8 left-0 z-40 w-72 md:h-screen pt-20 transition-transform -translate-x-full bg-green-800 border-r border-gray-200 sm:translate-x-0 dark:border-gray-400"
+        className="top-8 left-0 z-40 w-72  pt-20 transition-transform -translate-x-full bg-green-800 border-r border-gray-200 sm:translate-x-0 dark:border-gray-400"
         aria-label="Sidebar"
       >
         <div className="px-4 pb-6 overflow-y-auto bg-green-800 ">
