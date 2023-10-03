@@ -10,6 +10,7 @@ const Archivo = ({ file }) => {
 
   const [toggleStatus, setToggleStatus] = useState(false);
   const [toggleObservation, setToggleObservation] = useState(false);
+  const [isOpenDelete, setIsOpenDelete] = useState(false);
 
   const [newStatus, setNewStatus] = useState("");
   const [newObservation, setNewObservation] = useState("");
@@ -44,10 +45,16 @@ const Archivo = ({ file }) => {
     setIsOpenDelete(false);
   };
 
-  const handleDelete = async (id) => {
-    await deleteFile(id);
+  const confirmDelete = async (e) => {
+    e.preventDefault();
+    await deleteFile(file._id);
     const folder = await getFolder(folderId);
     dispatch(setFolder(folder));
+    setIsOpenDelete(false);
+  };
+
+  const handleDelete = () => {
+    setIsOpenDelete(true);
   };
 
   const addObservation = () => {};
@@ -121,7 +128,7 @@ const Archivo = ({ file }) => {
             <div className="flex justify-center space-x-2 mr-1 mb-3">
               {file.status === "En revisión..." && (
                 <button
-                  onClick={() => handleDelete(file._id)}
+                  onClick={() => handleDelete()}
                   className="inline-flex items-center pl-1 pr-1 py-1 text-sm font-medium text-center text-white bg-red-700 rounded-full hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-700 dark:hover:bg-red-800 dark:focus:ring-red-800"
                 >
                   <svg
@@ -234,6 +241,31 @@ const Archivo = ({ file }) => {
             </button>
             <button
               onClick={() => setToggleStatus(false)}
+              className="bg-red-600 hover:bg-red-700 p-2 rounded-md text-white w-2/3 m-2"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      )}
+
+      {isOpenDelete && (
+        <form className="fixed top-20 left-0 w-full h-full bg-black bg-opacity-50">
+          <div className="fixed top-1/3 flex flex-col w-1/3 left-1/3 items-center justify-center py-8 bg-gray-300 rounded-lg shadow-2xl">
+            <label className="text-center p-4 text-black">
+              ¿Seguro que desea eliminar este archivo? Esta acción no se puede
+              deshacer.
+            </label>
+
+            <button
+              onClick={(e) => confirmDelete(e)}
+              className="cursor-pointer hover:bg-green-900 mt-4 bg-green-800 p-2 rounded-md text-white w-2/3 m-2"
+            >
+              Confirmar
+            </button>
+
+            <button
+              onClick={cancelDelete}
               className="bg-red-600 hover:bg-red-700 p-2 rounded-md text-white w-2/3 m-2"
             >
               Cancelar
