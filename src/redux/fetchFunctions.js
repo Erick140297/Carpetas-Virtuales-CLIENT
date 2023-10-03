@@ -228,3 +228,14 @@ export const deleteFile = async (id) => {
     method: "DELETE",
   });
 };
+
+export const changeStatusFile = async (id, data) => {
+  const response = await fetch(`${URL}/file/change-status/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  return response;
+};

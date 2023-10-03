@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteFile, getFile, getFolder } from "../redux/fetchFunctions";
+import { changeStatusFile, deleteFile, getFile, getFolder } from "../redux/fetchFunctions";
 import { setFolder } from "../redux/slices/folderSlice";
 import Loading from "./Loading";
 
@@ -12,7 +12,6 @@ const Archivo = ({ file }) => {
   const [toggleObservation, setToggleObservation] = useState(false);
   const [isOpenDelete, setIsOpenDelete] = useState(false);
 
-  const [newStatus, setNewStatus] = useState("");
   const [newObservation, setNewObservation] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -45,6 +44,14 @@ const Archivo = ({ file }) => {
     setIsOpenDelete(false);
   };
 
+  const changeStatus = async (status) => {
+    const data = {status: status}
+    await changeStatusFile(file._id, data)
+    const folder = await getFolder(folderId);
+    dispatch(setFolder(folder));
+    setToggleStatus(false)
+  }
+
   const confirmDelete = async (e) => {
     e.preventDefault();
     await deleteFile(file._id);
@@ -56,10 +63,6 @@ const Archivo = ({ file }) => {
   const handleDelete = () => {
     setIsOpenDelete(true);
   };
-
-  const addObservation = () => {};
-
-  const changeStatus = () => {};
 
   return (
     <div className="cursor-pointer items-center text-white rounded-xl mb-3">
@@ -126,7 +129,7 @@ const Archivo = ({ file }) => {
               </div>
             </div>
             <div className="flex justify-center space-x-2 mr-1 mb-3">
-              {file.status === "En revisión..." && (
+              {(file.status === "En revisión..." | file.status === "Rechazado") && (
                 <button
                   onClick={() => handleDelete()}
                   className="inline-flex items-center pl-1 pr-1 py-1 text-sm font-medium text-center text-white bg-red-700 rounded-full hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-700 dark:hover:bg-red-800 dark:focus:ring-red-800"
@@ -173,26 +176,6 @@ const Archivo = ({ file }) => {
           </div>
         </div>
       )}
-      {/* <div className="">
-      <h2>{file.name}</h2>
-      <h2>Estado: {file.status}</h2>
-      <h2>Observación: {file.observation}</h2>
-      {!gerente && (
-        <button onClick={() => setToggleObservation(!toggleObservation)}>
-          Agregar observación
-        </button>
-      )}
-      {!gerente && (
-        <button onClick={() => setToggleStatus(!toggleStatus)}>
-          Cambiar estado
-        </button>
-      )}
-      <h2>{formatearFechaHora(file.date)}</h2>
-      <button onClick={() => download(file._id)}>Descargar</button>
-      {gerente && file.status === "En revisión..." && (
-        <button onClick={() => handleDelete(file._id)}>Eliminar</button>
-      )} */}
-
       {toggleObservation && (
         <form className="fixed top-20 left-0 w-full h-full bg-black bg-opacity-50">
           <div className="fixed top-1/3 flex flex-col w-1/3 left-1/3 items-center justify-center py-8 bg-gray-300 rounded-lg shadow-2xl">
@@ -225,18 +208,19 @@ const Archivo = ({ file }) => {
       )}
 
       {toggleStatus && (
-        <form className="fixed top-20 left-0 w-full h-full bg-black bg-opacity-50">
+        <div className="fixed top-20 left-0 w-full h-full bg-black bg-opacity-50">
           <div className="fixed top-1/3 flex flex-col w-1/3 left-1/3 items-center justify-center py-8 bg-gray-300 rounded-lg shadow-2xl">
             <label className="text-lg" htmlFor="folder">
               Seleccione un estado:
             </label>
             <button
+            onClick={()=> changeStatus("Aceptado")}
               className="cursor-pointer hover:bg-green-900 mt-4 bg-green-800 p-2 rounded-md text-white w-2/3 m-2"
               type="submit"
             >
               Aceptado
             </button>
-            <button className="bg-red-600 hover:bg-red-700 p-2 rounded-md text-white w-2/3 m-2">
+            <button onClick={()=> changeStatus("Rechazado")} className="bg-red-600 hover:bg-red-700 p-2 rounded-md text-white w-2/3 m-2">
               Rechazado
             </button>
             <button
@@ -246,7 +230,7 @@ const Archivo = ({ file }) => {
               Cancelar
             </button>
           </div>
-        </form>
+        </div>
       )}
 
       {isOpenDelete && (
