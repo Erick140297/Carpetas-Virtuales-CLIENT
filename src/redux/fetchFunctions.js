@@ -239,3 +239,14 @@ export const changeStatusFile = async (id, data) => {
   });
   return response;
 };
+
+export const addObservations = async (id, data) => {
+  const response = await fetch(`${URL}/file/add-observations/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  return response;
+};

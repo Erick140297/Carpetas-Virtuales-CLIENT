@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changeStatusFile, deleteFile, getFile, getFolder } from "../redux/fetchFunctions";
+import {
+  addObservations,
+  changeStatusFile,
+  deleteFile,
+  getFile,
+  getFolder,
+} from "../redux/fetchFunctions";
 import { setFolder } from "../redux/slices/folderSlice";
 import Loading from "./Loading";
 
@@ -9,10 +15,10 @@ const Archivo = ({ file }) => {
   const gerente = useSelector((state) => state.users.gerente);
 
   const [toggleStatus, setToggleStatus] = useState(false);
-  const [toggleObservation, setToggleObservation] = useState(false);
+  const [toggleObservations, setToggleObservations] = useState(false);
   const [isOpenDelete, setIsOpenDelete] = useState(false);
 
-  const [newObservation, setNewObservation] = useState("");
+  const [observations, setObservations] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
@@ -45,12 +51,12 @@ const Archivo = ({ file }) => {
   };
 
   const changeStatus = async (status) => {
-    const data = {status: status}
-    await changeStatusFile(file._id, data)
+    const data = { status: status };
+    await changeStatusFile(file._id, data);
     const folder = await getFolder(folderId);
     dispatch(setFolder(folder));
-    setToggleStatus(false)
-  }
+    setToggleStatus(false);
+  };
 
   const confirmDelete = async (e) => {
     e.preventDefault();
@@ -62,6 +68,18 @@ const Archivo = ({ file }) => {
 
   const handleDelete = () => {
     setIsOpenDelete(true);
+  };
+
+  const handleObservationChange = (e) => {
+    setObservations(e.target.value);
+  };
+
+  const handleAddObservations = async () => {
+    const data = { observations };
+    await addObservations(file._id, data);
+    const folder = await getFolder(folderId);
+    dispatch(setFolder(folder));
+    setToggleObservations(false);
   };
 
   return (
@@ -93,11 +111,11 @@ const Archivo = ({ file }) => {
                 </h5>
                 {!gerente && (
                   <button
-                    onClick={() => setToggleObservation(!toggleObservation)}
+                    onClick={() => setToggleObservations(!toggleObservations)}
                     className="inline-flex mt-6 py-2 items-center w-20 text-xs font-normal text-center text-white bg-blue-700 rounded-md hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 dark:bg-blue-700 dark:hover:bg-blue-800 dark:focus:ring-blue-800"
                     style={{ maxHeight: "3em", lineHeight: "1" }}
                   >
-                    Agregar observación
+                    Agregar observaciones
                   </button>
                 )}
               </div>
@@ -108,15 +126,11 @@ const Archivo = ({ file }) => {
                 >
                   {file.status}
                 </h5>
-                <h5
-                  className="text-sm px-1 md:w-20 font-normal text-gray-900 dark:text-grey"
-                  style={{ maxHeight: "3em", lineHeight: "1" }}
-                >
-                  {file.observation}
-                </h5>
+
                 <h5 className="px-1 text-slate-700 md:w-20 font-thin text-xs dark:text-grey">
                   {formatearFechaHora(file.date)}
                 </h5>
+
                 {!gerente && (
                   <button
                     onClick={() => setToggleStatus(!toggleStatus)}
@@ -128,8 +142,15 @@ const Archivo = ({ file }) => {
                 )}
               </div>
             </div>
+            <h5
+              className="text-sm px-1 py-1 font-normal text-gray-900 dark:text-grey"
+              style={{ maxHeight: "3em", lineHeight: "1" }}
+            >
+              Observaciones: {file.observations}
+            </h5>
             <div className="flex justify-center space-x-2 mr-1 mb-3">
-              {(file.status === "En revisión..." | file.status === "Rechazado") && (
+              {(file.status === "En revisión...") |
+                (file.status === "Rechazado") && (
                 <button
                   onClick={() => handleDelete()}
                   className="inline-flex items-center pl-1 pr-1 py-1 text-sm font-medium text-center text-white bg-red-700 rounded-full hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-700 dark:hover:bg-red-800 dark:focus:ring-red-800"
@@ -172,39 +193,45 @@ const Archivo = ({ file }) => {
                   />
                 </svg>
               </button>
-            </div>
+            </div>  
           </div>
+          
         </div>
       )}
-      {toggleObservation && (
-        <form className="fixed top-20 left-0 w-full h-full bg-black bg-opacity-50">
+      {toggleObservations && (
+        <div className="fixed top-20 left-0 w-full h-full bg-black bg-opacity-50">
           <div className="fixed top-1/3 flex flex-col w-1/3 left-1/3 items-center justify-center py-8 bg-gray-300 rounded-lg shadow-2xl">
             <label className="text-lg" htmlFor="folder">
-              Agregue una observación:
+              Agregue sus observaciones:
             </label>
             <textarea
+              onChange={handleObservationChange}
+              value={observations}
               id="archivo"
-              className="outline-none p-2 rounded-md w-2/3 m-2"
-              type="file"
-              name="file"
+              className="text-black outline-none p-2 rounded-md w-2/3 m-2"
+              type="text"
+              name="observation"
             />
             {/* {error && (
             <p className="text-red-500 text-sm">{error}</p>
           )} */}
             <button
+              onClick={() => handleAddObservations()}
               className="cursor-pointer hover:bg-green-900 mt-4 bg-green-800 p-2 rounded-md text-white w-2/3 m-2"
               type="submit"
             >
               Crear observación
             </button>
             <button
-              onClick={() => setToggleObservation(false)}
+              onClick={() => {
+                setToggleObservations(false), setObservations("");
+              }}
               className="bg-red-600 hover:bg-red-700 p-2 rounded-md text-white w-2/3 m-2"
             >
               Cancelar
             </button>
           </div>
-        </form>
+        </div>
       )}
 
       {toggleStatus && (
@@ -214,13 +241,16 @@ const Archivo = ({ file }) => {
               Seleccione un estado:
             </label>
             <button
-            onClick={()=> changeStatus("Aceptado")}
+              onClick={() => changeStatus("Aceptado")}
               className="cursor-pointer hover:bg-green-900 mt-4 bg-green-800 p-2 rounded-md text-white w-2/3 m-2"
               type="submit"
             >
               Aceptado
             </button>
-            <button onClick={()=> changeStatus("Rechazado")} className="bg-red-600 hover:bg-red-700 p-2 rounded-md text-white w-2/3 m-2">
+            <button
+              onClick={() => changeStatus("Rechazado")}
+              className="bg-red-600 hover:bg-red-700 p-2 rounded-md text-white w-2/3 m-2"
+            >
               Rechazado
             </button>
             <button
