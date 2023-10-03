@@ -10,5 +10,15 @@ Currently, two official plugins are available:
 
 Tareas
 
-Agregar una fecha limite a la subida del archivo
+- Agregar paso de confirmación para eliminar una carpeta
+
+- Agregar paso de confirmación para eliminar un archivo
+
+- Agregar comentarios en los archivos
+
+- Cambiar estatus en los archivos
+
+- Agregar las demas zonas y estaciones 
+
+- Agregar comentarios en las carpetas
 
